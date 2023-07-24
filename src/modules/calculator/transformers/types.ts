@@ -5,5 +5,6 @@ export interface ParsedPayload {
   data: {
     date: string;
     carrier: string;
+    size: string;
   };
 }
