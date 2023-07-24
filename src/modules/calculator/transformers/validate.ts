@@ -3,39 +3,38 @@ import { TransformCallback } from 'stream';
 import { hasOwnProperty, isValidISODateWithoutHours } from '@lib/index';
 
 import { ParsedPayload } from './types';
-import { useIgnore } from '../hooks';
-import { CARRIER_PRICE_LIST } from '../constants';
+import { useIgnore, useConfig } from '../hooks';
 
-export const makeValidate = (carrierPriceList: typeof CARRIER_PRICE_LIST) =>
-  function validate(payload: ParsedPayload, _: BufferEncoding, next: TransformCallback) {
-    const ignore = useIgnore(next);
+export const validate = (payload: ParsedPayload, _: BufferEncoding, next: TransformCallback) => {
+  const { priceList } = useConfig();
+  const ignore = useIgnore(next);
 
-    const {
-      context: { log },
-      data: { carrier, size, date },
-    } = payload;
+  const {
+    context: { log },
+    data: { carrier, size, date },
+  } = payload;
 
-    if (!isValidISODateWithoutHours(date)) {
-      ignore(log);
-      return;
-    }
+  if (!isValidISODateWithoutHours(date)) {
+    ignore(log);
+    return;
+  }
 
-    if (!hasOwnProperty(carrierPriceList, carrier)) {
-      ignore(log);
-      return;
-    }
+  if (!hasOwnProperty(priceList, carrier)) {
+    ignore(log);
+    return;
+  }
 
-    const nestedProperty = carrierPriceList[carrier];
+  const nestedProperty = priceList[carrier];
 
-    if (typeof nestedProperty !== 'object' || nestedProperty == null) {
-      ignore(log);
-      return;
-    }
+  if (typeof nestedProperty !== 'object' || nestedProperty == null) {
+    ignore(log);
+    return;
+  }
 
-    if (!nestedProperty.hasOwnProperty(size)) {
-      ignore(log);
-      return;
-    }
+  if (!nestedProperty.hasOwnProperty(size)) {
+    ignore(log);
+    return;
+  }
 
-    next(null, payload);
-  };
+  next(null, payload);
+};

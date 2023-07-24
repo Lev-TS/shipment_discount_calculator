@@ -1,9 +1,11 @@
 import { type TransformOptions, type TransformCallback, Transform } from 'stream';
+import type { Config } from './types';
 
-let hookedWritable: NodeJS.WritableStream;
+let hookedConfig: Config;
 
-export const useInject = (writable: NodeJS.WritableStream) => {
-  hookedWritable = writable;
+export const hookConfig = (config: Config) => {
+  hookedConfig = config;
+
   return function inject(
     transform: (payload: any, _: BufferEncoding, next: TransformCallback) => void,
     options?: TransformOptions
@@ -18,7 +20,9 @@ export const useInject = (writable: NodeJS.WritableStream) => {
 
 export const useIgnore = (next: TransformCallback) => {
   return function ignore(log?: string) {
-    hookedWritable.write((log ? `${log} ignore` : 'ignore') + '\n');
+    hookedConfig.writeableStream.write((log ? `${log} ignore` : 'ignore') + '\n');
     next();
   };
 };
+
+export const useConfig = () => hookedConfig;

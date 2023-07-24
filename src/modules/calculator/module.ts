@@ -1,20 +1,27 @@
-import { Interface } from 'readline';
+import { type Interface } from 'readline';
 import { pipeline } from 'stream/promises';
 
-import { useInject } from '@modules/calculator/hooks';
+import { hookConfig } from '@modules/calculator/hooks';
 
-import { parse, prepare } from './transformers';
-import { makeValidate } from './transformers/validate';
-import { CARRIER_PRICE_LIST } from './constants';
+import { contextualize, control, parse, validate } from './transformers';
 
-export const read = async (readable: NodeJS.ReadableStream | Interface, writable: NodeJS.WritableStream) => {
-  const inject = useInject(writable);
+import type { Config } from './types';
 
-  const validate = makeValidate(CARRIER_PRICE_LIST);
+const read = async (readable: NodeJS.ReadableStream | Interface, config: Config) => {
+  const inject = hookConfig(config);
 
   try {
-    await pipeline(readable, inject(parse), inject(validate), inject(prepare), writable);
+    await pipeline(
+      readable,
+      inject(parse),
+      inject(validate),
+      inject(contextualize),
+      inject(control),
+      config.writeableStream
+    );
   } catch (error) {
     console.error(error);
   }
 };
+
+export { read, Config };
