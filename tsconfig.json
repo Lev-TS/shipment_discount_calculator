@@ -17,7 +17,8 @@
     "incremental": true,
     "baseUrl": "src",
     "paths": {
-      "@lib/*": ["lib/*"]
+      "@lib/*": ["lib/*"],
+      "@modules/*": ["modules/*"]
     }
   },
   "exclude": ["node_modules"],

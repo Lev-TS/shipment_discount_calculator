@@ -1,10 +1,10 @@
 {
   "name": "vinted-task",
   "version": "1.0.0",
-  "description": "",
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "test": "jest"
+    "start": "ts-node src/app.ts",
+    "test": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
