@@ -1,5 +1,5 @@
 import { useConfig, useDispatchDefault, useDispatchDiscount } from '../hooks';
-import { type ContextualizedPayload, Carrier, Size, type TransformerFunction } from '../types';
+import { Carrier, Size, type ContextualizedPayload, type TransformerFunction } from '../types';
 
 export const useCalculate = (): TransformerFunction<ContextualizedPayload> => {
   let discountBudget: number;

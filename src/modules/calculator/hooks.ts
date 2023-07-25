@@ -1,4 +1,4 @@
-import { type TransformOptions, type TransformCallback, Transform } from 'stream';
+import { type TransformCallback, Transform } from 'stream';
 import type { Config, Inject } from './types';
 
 let hookedConfig: Config;
@@ -6,10 +6,7 @@ let hookedConfig: Config;
 export const hookConfig = (config: Config): Inject => {
   hookedConfig = config;
 
-  return function inject(
-    transform: (payload: any, _: BufferEncoding, next: TransformCallback) => void,
-    options?: TransformOptions,
-  ) {
+  return function inject(transform, options) {
     return new Transform({
       transform,
       objectMode: true,

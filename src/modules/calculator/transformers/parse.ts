@@ -1,6 +1,5 @@
+import { useDispatchIgnore } from '../hooks';
 import type { TransformerFunction } from '../types';
-
-import { useDispatchIgnore } from '@modules/calculator/hooks';
 
 export const parse: TransformerFunction<Buffer> = (payload, _, next): void => {
   const dispatchIgnore = useDispatchIgnore(next);
