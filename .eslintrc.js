@@ -21,5 +21,8 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: './tsconfig.json',
   },
-  rules: {},
+  rules: {
+    '@typescript-eslint/no-useless-constructor': 'off',
+    '@typescript-eslint/no-var-requires': 'warn',
+  },
 };

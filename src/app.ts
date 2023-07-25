@@ -3,7 +3,7 @@ import { createReadStream } from 'fs';
 import { createInterface } from 'readline';
 import { calculator } from './modules';
 
-const chunkStream = createReadStream('input.txt', { encoding: 'utf8' });
+const chunkStream = createReadStream(process.argv[2], { encoding: 'utf8' });
 
 const lineStream = createInterface({
   input: chunkStream,
