@@ -10,7 +10,7 @@ class SpyWritableStream extends Writable {
     super(options);
   }
 
-  _write(chunk: any, _: BufferEncoding, next: (error?: Error | null) => void) {
+  _write(chunk: any, _: BufferEncoding, next: (error?: Error | null) => void): void {
     this.data.push(chunk);
     next();
   }
