@@ -1,21 +1,21 @@
 import { TransformCallback } from 'stream';
 
-import { useIgnore } from '@modules/calculator/hooks';
+import { useDispatchIgnore } from '@modules/calculator/hooks';
 
 export const parse = (payload: any, _: BufferEncoding, next: TransformCallback) => {
-  const ignore = useIgnore(next);
+  const dispatchIgnore = useDispatchIgnore(next);
 
   const log = payload.toString();
 
   if (!log.length) {
-    ignore(log);
+    dispatchIgnore(log);
     return;
   }
 
   const tuple = log.split(' ').filter((el: string) => el.length > 0);
 
   if (tuple.length !== 3) {
-    ignore(log);
+    dispatchIgnore(log);
     return;
   }
 

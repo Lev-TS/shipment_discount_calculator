@@ -1,16 +1,10 @@
-import { TransformCallback } from 'stream';
-import { ContextualizedPayload } from './types';
-import { useConfig } from '../hooks';
-import { Carrier, Size } from '../types';
+import type { TransformCallback } from 'stream';
+
+import { useConfig, useDispatchDefault, useDispatchDiscount } from '../hooks';
+import { type ContextualizedPayload, Carrier, Size } from '../types';
 
 let discountBudget: number;
 let largeLPCount = 0;
-
-const useDispatchDiscount = (next: TransformCallback, log: string) => (price: number, discount: number) =>
-  next(null, `${log} ${price.toFixed(2)} ${discount.toFixed(2)}\n`);
-
-const useDispatchDefault = (next: TransformCallback, log: string, price: number, discount: string) => () =>
-  next(null, `${log} ${price.toFixed(2)} ${discount}\n`);
 
 export const control = (payload: ContextualizedPayload, _: BufferEncoding, next: TransformCallback) => {
   const { priceList, monthlyDiscountBudget, nthOfFreeLargeLP } = useConfig();

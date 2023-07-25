@@ -2,12 +2,12 @@ import { TransformCallback } from 'stream';
 
 import { hasOwnProperty, isValidISODateWithoutHours } from '@lib/index';
 
-import { ParsedPayload } from './types';
-import { useIgnore, useConfig } from '../hooks';
+import type { ParsedPayload } from '../types';
+import { useDispatchIgnore, useConfig } from '../hooks';
 
 export const validate = (payload: ParsedPayload, _: BufferEncoding, next: TransformCallback) => {
   const { priceList } = useConfig();
-  const ignore = useIgnore(next);
+  const dispatchIgnore = useDispatchIgnore(next);
 
   const {
     context: { log },
@@ -15,24 +15,24 @@ export const validate = (payload: ParsedPayload, _: BufferEncoding, next: Transf
   } = payload;
 
   if (!isValidISODateWithoutHours(date)) {
-    ignore(log);
+    dispatchIgnore(log);
     return;
   }
 
   if (!hasOwnProperty(priceList, carrier)) {
-    ignore(log);
+    dispatchIgnore(log);
     return;
   }
 
   const nestedProperty = priceList[carrier];
 
   if (typeof nestedProperty !== 'object' || nestedProperty == null) {
-    ignore(log);
+    dispatchIgnore(log);
     return;
   }
 
   if (!nestedProperty.hasOwnProperty(size)) {
-    ignore(log);
+    dispatchIgnore(log);
     return;
   }
 

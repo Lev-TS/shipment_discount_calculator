@@ -1,5 +1,5 @@
 import { type TransformCallback } from 'stream';
-import type { ValidatedPayload } from './types';
+import type { ValidatedPayload } from '../types';
 
 let prevDate = new Date('1900-01-01');
 
