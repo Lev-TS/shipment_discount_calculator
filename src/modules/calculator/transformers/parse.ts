@@ -1,13 +1,13 @@
-import { TransformCallback } from 'stream';
+import type { TransformerFunction } from '../types';
 
 import { useDispatchIgnore } from '@modules/calculator/hooks';
 
-export const parse = (payload: any, _: BufferEncoding, next: TransformCallback) => {
+export const parse: TransformerFunction<Buffer> = (payload, _, next): void => {
   const dispatchIgnore = useDispatchIgnore(next);
 
   const log = payload.toString();
 
-  if (!log.length) {
+  if (log.length <= 0) {
     dispatchIgnore(log);
     return;
   }

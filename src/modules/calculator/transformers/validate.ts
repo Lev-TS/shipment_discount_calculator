@@ -1,12 +1,9 @@
-import { TransformCallback } from 'stream';
+import { isValidISODateWithoutHours } from '@lib/index';
 
-import { hasOwnProperty, isValidISODateWithoutHours } from '@lib/index';
+import { Carrier, Size, type ParsedPayload, type TransformerFunction } from '../types';
+import { useDispatchIgnore } from '../hooks';
 
-import type { ParsedPayload } from '../types';
-import { useDispatchIgnore, useConfig } from '../hooks';
-
-export const validate = (payload: ParsedPayload, _: BufferEncoding, next: TransformCallback) => {
-  const { priceList } = useConfig();
+export const validate: TransformerFunction<ParsedPayload> = (payload, _, next) => {
   const dispatchIgnore = useDispatchIgnore(next);
 
   const {
@@ -19,19 +16,7 @@ export const validate = (payload: ParsedPayload, _: BufferEncoding, next: Transf
     return;
   }
 
-  if (!hasOwnProperty(priceList, carrier)) {
-    dispatchIgnore(log);
-    return;
-  }
-
-  const nestedProperty = priceList[carrier];
-
-  if (typeof nestedProperty !== 'object' || nestedProperty == null) {
-    dispatchIgnore(log);
-    return;
-  }
-
-  if (!nestedProperty.hasOwnProperty(size)) {
+  if (!(carrier in Carrier) || !(size in Size)) {
     dispatchIgnore(log);
     return;
   }

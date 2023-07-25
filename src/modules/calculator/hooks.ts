@@ -1,14 +1,14 @@
 import { type TransformOptions, type TransformCallback, Transform } from 'stream';
-import type { Config } from './types';
+import type { Config, Inject } from './types';
 
 let hookedConfig: Config;
 
-export const hookConfig = (config: Config) => {
+export const hookConfig = (config: Config): Inject => {
   hookedConfig = config;
 
   return function inject(
     transform: (payload: any, _: BufferEncoding, next: TransformCallback) => void,
-    options?: TransformOptions
+    options?: TransformOptions,
   ) {
     return new Transform({
       transform,
@@ -20,7 +20,7 @@ export const hookConfig = (config: Config) => {
 
 export const useDispatchIgnore = (next: TransformCallback) => {
   return function dispatchIgnore(log?: string) {
-    hookedConfig.writeableStream.write((log ? `${log} Ignored` : 'Ignored') + '\n');
+    hookedConfig.writeableStream.write((log != null && log.length > 0 ? `${log} Ignored` : 'Ignored') + '\n');
     next();
   };
 };
@@ -39,4 +39,4 @@ export const useDispatchDefault = (next: TransformCallback, log: string, price: 
   };
 };
 
-export const useConfig = () => hookedConfig;
+export const useConfig = (): Config => hookedConfig;

@@ -1,13 +1,11 @@
-import type { TransformCallback } from 'stream';
-
 import { useConfig, useDispatchDefault, useDispatchDiscount } from '../hooks';
-import { type ContextualizedPayload, Carrier, Size } from '../types';
+import { type ContextualizedPayload, Carrier, Size, type TransformerFunction } from '../types';
 
-export const useCalculate = () => {
+export const useCalculate = (): TransformerFunction<ContextualizedPayload> => {
   let discountBudget: number;
   let largeLPCount = 0;
 
-  return function calculate(payload: ContextualizedPayload, _: BufferEncoding, next: TransformCallback) {
+  return function calculate(payload, _, next) {
     const { priceList, monthlyDiscountBudget, nthOfFreeLargeLP } = useConfig();
     const {
       context: { isNewMonth, log },
@@ -26,13 +24,13 @@ export const useCalculate = () => {
     }
 
     switch (size) {
-      case Size.small: {
+      case Size.s: {
         const smallestPrice = Object.values(priceList).reduce(
-          (acc: number, providerPrices) => (acc < providerPrices[Size.small] ? acc : providerPrices[Size.small]),
-          defaultPrice
+          (acc: number, providerPrices) => (acc < providerPrices[Size.s] ? acc : providerPrices[Size.s]),
+          defaultPrice,
         );
 
-        if (smallestPrice == priceList[carrier][size]) {
+        if (smallestPrice === priceList[carrier][size]) {
           dispatchDefault();
           break;
         }
@@ -49,7 +47,7 @@ export const useCalculate = () => {
         discountBudget = 0;
         break;
       }
-      case Size.large: {
+      case Size.l: {
         if (carrier !== Carrier.lp) {
           dispatchDefault();
           break;
@@ -67,6 +65,9 @@ export const useCalculate = () => {
           discountBudget = discountBudget - defaultPrice;
           break;
         }
+
+        dispatchDefault();
+        break;
       }
       default:
         dispatchDefault();

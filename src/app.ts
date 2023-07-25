@@ -28,4 +28,6 @@ const config: calculator.Config = {
   },
 };
 
-calculator.read(lineStream, config);
+calculator.read(lineStream, config).catch((error) => {
+  console.error(error);
+});

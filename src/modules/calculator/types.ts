@@ -1,12 +1,14 @@
+import type { TransformOptions, TransformCallback, Transform } from 'stream';
+
 export enum Carrier {
   lp = 'lp',
   mr = 'mr',
 }
 
 export enum Size {
-  small = 's',
-  medium = 'm',
-  large = 'l',
+  s = 's',
+  m = 'm',
+  l = 'l',
 }
 
 export type PriceList = Record<Carrier, Record<Size, number>>;
@@ -49,3 +51,7 @@ export interface ContextualizedPayload {
   };
   data: ValidatedData;
 }
+
+export type TransformerFunction<T> = (payload: T, encoding: BufferEncoding, cb: TransformCallback) => void;
+
+export type Inject = (transformer: TransformerFunction<any>, options?: TransformOptions) => Transform;

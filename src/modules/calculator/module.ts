@@ -7,7 +7,7 @@ import { useContextualize, useCalculate, parse, validate } from './transformers'
 
 import type { Config } from './types';
 
-const read = async (readable: Interface, config: Config) => {
+const read: (readable: Interface, config: Config) => Promise<void> = async (readable, config) => {
   const inject = hookConfig(config);
 
   try {
@@ -17,11 +17,11 @@ const read = async (readable: Interface, config: Config) => {
       inject(validate),
       inject(useContextualize()),
       inject(useCalculate()),
-      config.writeableStream
+      config.writeableStream,
     );
   } catch (error) {
     console.error(error);
   }
 };
 
-export { read, Config };
+export { read, type Config };
