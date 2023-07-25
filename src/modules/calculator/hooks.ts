@@ -19,20 +19,24 @@ export const hookConfig = (config: Config) => {
 };
 
 export const useDispatchIgnore = (next: TransformCallback) => {
-  return function ignore(log?: string) {
+  return function dispatchIgnore(log?: string) {
     hookedConfig.writeableStream.write((log ? `${log} ignore` : 'ignore') + '\n');
     next();
   };
 };
 
-export const useDispatchDiscount = (next: TransformCallback, log: string) => (price: number, discount: number) => {
-  hookedConfig.writeableStream.write(`${log} ${price.toFixed(2)} ${discount.toFixed(2)}\n`);
-  next();
+export const useDispatchDiscount = (next: TransformCallback, log: string) => {
+  return function dispatchDiscount(price: number, discount: number) {
+    hookedConfig.writeableStream.write(`${log} ${price.toFixed(2)} ${discount.toFixed(2)}\n`);
+    next();
+  };
 };
 
-export const useDispatchDefault = (next: TransformCallback, log: string, price: number, discount: string) => () => {
-  hookedConfig.writeableStream.write(`${log} ${price.toFixed(2)} ${discount}\n`);
-  next();
+export const useDispatchDefault = (next: TransformCallback, log: string, price: number, discount: string) => {
+  return function dispatchDefault() {
+    hookedConfig.writeableStream.write(`${log} ${price.toFixed(2)} ${discount}\n`);
+    next();
+  };
 };
 
 export const useConfig = () => hookedConfig;
