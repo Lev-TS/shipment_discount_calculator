@@ -20,7 +20,7 @@ export const hookConfig = (config: Config) => {
 
 export const useDispatchIgnore = (next: TransformCallback) => {
   return function dispatchIgnore(log?: string) {
-    hookedConfig.writeableStream.write((log ? `${log} ignore` : 'ignore') + '\n');
+    hookedConfig.writeableStream.write((log ? `${log} Ignored` : 'Ignored') + '\n');
     next();
   };
 };
