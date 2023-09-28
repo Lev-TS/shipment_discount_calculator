@@ -1,4 +1,4 @@
-# Vinted Interview Task
+# Task
 
 ## Description
 
@@ -31,13 +31,13 @@ npm install
 Replace the content of the `input.txt` in the root directory and run:
 
 ```console
-npm start input.txt
+npm run input.txt
 ```
 
 I have also included a `large_input.txt` which contains 1.6 million random entries. The app is able to process it in under 10 seconds. To test it with the provided large input run:
 
 ```console
-npm start large_input.txt
+npm run large_input.txt
 ```
 
 ### Run tests

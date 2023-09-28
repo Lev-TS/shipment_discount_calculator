@@ -1,8 +1,10 @@
 {
-  "name": "vinted-task",
+  "name": "shipment_discount_calculator",
   "version": "1.0.0",
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "calculate": "ts-node src/app.ts",
+    "input.txt": "cat input.txt | npm run calculate",
+    "large_input.txt": "cat large_input.txt | npm run calculate",
     "test": "jest",
     "test:dev": "jest --watch",
     "test:coverage": "jest --coverage",

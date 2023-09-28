@@ -1,12 +1,11 @@
-import { createReadStream } from 'fs';
+// import { createReadStream } from 'fs';
 import { createInterface } from 'readline';
 
 import { calculator } from './modules';
+import * as process from "process";
 
-const chunkStream = createReadStream(process.argv[2], { encoding: 'utf8' });
-
-const lineStream = createInterface({
-  input: chunkStream,
+const readableStream = createInterface({
+  input: process.stdin,
   crlfDelay: Infinity,
 });
 
@@ -28,6 +27,6 @@ const config: calculator.Config = {
   },
 };
 
-calculator.read(lineStream, config).catch((error) => {
+calculator.read(readableStream, config).catch((error) => {
   console.error(error);
 });

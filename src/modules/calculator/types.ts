@@ -1,4 +1,5 @@
-import type { TransformOptions, TransformCallback, Transform } from 'stream';
+import type {TransformOptions, TransformCallback, Transform, Readable} from 'stream';
+import type {Interface} from "readline";
 
 export enum Carrier {
   lp = 'lp',
@@ -11,13 +12,15 @@ export enum Size {
   l = 'l',
 }
 
-export type PriceList = Record<Carrier, Record<Size, number>>;
+type Prices = Readonly<Record<Size, number>>;
+
+export type PriceList = Readonly<Record<Carrier, Prices>>;
 
 export interface Config {
-  writeableStream: NodeJS.WritableStream;
-  priceList: PriceList;
-  monthlyDiscountBudget: number;
-  nthOfFreeLargeLP: number;
+  readonly writeableStream: NodeJS.WritableStream;
+  readonly priceList: PriceList;
+  readonly monthlyDiscountBudget: number;
+  readonly nthOfFreeLargeLP: number;
 }
 
 export interface ParsedPayload {
@@ -53,5 +56,5 @@ export interface ContextualizedPayload {
 }
 
 export type TransformerFunction<T> = (payload: T, encoding: BufferEncoding, cb: TransformCallback) => void;
-
 export type Inject = (transformer: TransformerFunction<any>, options?: TransformOptions) => Transform;
+export type Read = (readable: Readable | Interface, config: Config) => Promise<void>

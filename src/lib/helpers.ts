@@ -6,7 +6,6 @@ export const isValidISODateWithoutHours = (dateString: string): boolean => {
   }
 
   const date = new Date(dateString);
-  const isValidDate = !isNaN(date.getTime());
 
-  return isValidDate;
+  return !isNaN(date.getTime());
 };
